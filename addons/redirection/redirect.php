@@ -222,9 +222,16 @@ class UACF7_Redirection {
     
     public function uacf7_get_options( $post_id ) {
 		$fields = $this->fields();
+		$values = array();
 		$post_meta = uacf7_get_form_option($post_id, 'redirection');
+
+		// uacf7_get_form_option() can return false when redirection is not configured.
+		if ( ! is_array( $post_meta ) ) {
+			return $values;
+		}
+
 		foreach ( $fields as $field ) {
-			$values[ $field['name'] ] = $post_meta[$field['name']];
+			$values[ $field['name'] ] = isset( $post_meta[ $field['name'] ] ) ? $post_meta[ $field['name'] ] : '';
 		}
 		return $values;
 	}
